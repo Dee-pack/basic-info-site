@@ -4,6 +4,7 @@ const fs = require("fs");
 const server = http.createServer((req, res) => {
     console.log(req.url);
     let file;
+    let status = 200;
     if (req.url === "/") {
         file = "index.html";
     } else if (req.url === "/about") {
@@ -12,13 +13,14 @@ const server = http.createServer((req, res) => {
         file = "contact-me.html";
     } else {
         file = "404.html";
+        status = 404;
     }
     fs.readFile(file, (err, data) => {
         if (err) {
             res.writeHead(500, { "Content-Type": "text/plain" });
             return res.end("Internal server error");
         }
-        res.writeHead(200, { "Content-Type": "text/html" });
+        res.writeHead(status, { "Content-Type": "text/html" });
         res.end(data);
     });
 });
